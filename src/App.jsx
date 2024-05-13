@@ -32,7 +32,7 @@ const App = () => {
         />
 
       <div className=' grid grid-cols-6 gap-3'>
-        {filteredData ? (
+        {filteredData && (
           filteredData.map((ele) => (
             <div 
               key={ele.name.common}
@@ -40,14 +40,12 @@ const App = () => {
             >
                 <img 
                   className='h-[70%] w-[80%] object-contain' 
-                  src={ele.flags.svg}  
+                  src={ele.flags.png}  
                   alt={ele.flags.alt} 
                 />
                 <p>{ele.name.common}</p>
             </div>
           ))
-        ) : (
-          <h1 >Loading...</h1>
         )}
       </div>
     </div>
