@@ -1,56 +1,47 @@
-import React, { useEffect, useState } from 'react'
 
-const App = () => {
-  const [country , setCountry] = useState([])
-  const [search , setSearch] = useState('')
+import { useEffect, useState } from 'react'
 
-  const searchCountry = async () => {
+
+function App() {
+  const [countries, setCountries] = useState([]);
+  const [searchCountry, setSearchCountry] = useState("");
+
+  const getCountries = async () => {
     try {
-      const data = await fetch("https://restcountries.com/v3.1/all")
-      const dataJson = await data.json()
-      setCountry(dataJson)
-    } catch (error) {
-      console.error(error)
+      const data = await fetch("https://restcountries.com/v3.1/all");
+      const dataJson = await data.json();
+      setCountries(dataJson);
+    } catch (err) {
+      console.error("Failed to fetch Countries: ", err);
     }
   }
 
   useEffect(() => {
-    searchCountry()
-  } , [search])
+    getCountries();
+  }, [searchCountry])
 
-  
-  const filteredData = country.filter(ele => ele.name.common.toLowerCase().includes(search.toLowerCase()))
+  const filterCountry = countries.filter((country) => country.name.common.toLowerCase().includes(searchCountry.toLowerCase()));
 
   return (
-    <div className=''>
-      <input 
-        type="text" 
-        placeholder='Search here..' 
-        className=' m-auto block w-[70%] text-[1rem] p-3 mt-[1rem]'
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+    <>
+    <div className='app'>
+        <input
+            className=' m-auto block w-[70%] text-[1rem] p-3 mt-[1rem]'
+            type="text" 
+            placeholder='Search here..' 
+            value={searchCountry}
+            onChange={(e) => setSearchCountry(e.target.value)}
         />
-
-      <div className=' grid grid-cols-6 gap-3'>
-        {filteredData ? (
-          filteredData.map((ele) => (
-            <div 
-              key={ele.cca3}
-              className='flex items-center justify-center flex-col gap-y-2 mt-[1rem]'
-            >
-                <img 
-                  className='h-[70%] w-[80%] object-contain' 
-                  src={ele.flags.png}  
-                  alt={"flags"} 
-                />
-                <p>{ele.name.common}</p>
-            </div>
-          ))
-        ) : (
-          <h1 >Loading...</h1>
-        )}
+        <div className='grid grid-cols-6 gap-3'>
+            {filterCountry && filterCountry.map((country) => (
+              <div key={country.cca3} className='countryCard'>
+                <img className='flex items-center justify-center flex-col gap-y-2 mt-[1rem]' src={country.flags.png} alt="flags" />
+                <h2>{country.name.common}</h2>
+              </div>
+            ))}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
