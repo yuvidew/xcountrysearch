@@ -32,7 +32,7 @@ const App = () => {
         />
 
       <div className=' grid grid-cols-6 gap-3'>
-        {country.length !==0 ? (
+        {filteredData ? (
           filteredData.map((ele) => (
             <div 
               key={ele.name.common}
